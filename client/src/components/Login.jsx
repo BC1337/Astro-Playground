@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../styles/signup.css'; // Import the same CSS file used for signup
 
-function LoginPage() {
+const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -22,24 +23,34 @@ function LoginPage() {
   };
 
   return (
-    <div>
-      <h2>Login</h2>
-      <input
-        type="text"
-        placeholder="Username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>Login</button>
+    <div className=""> {/* Apply the container class */}
+      <h1>Login</h1> 
+      <form onSubmit={handleLogin}> {/* Convert to a form */}
+        <div>
+          <label htmlFor="username">Username</label> {/* Use label for accessibility */}
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          <label htmlFor="password">Password</label> {/* Use label for accessibility */}
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button type="submit" id="signup">Login</button> {/* Apply the same button styles */}
+      </form>
       {error && <p>{error}</p>}
     </div>
   );
-}
+};
 
 export default LoginPage;
