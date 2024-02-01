@@ -1,0 +1,16 @@
+---
+import Layout from "../layouts/Layout.astro"
+import '../styles/signup.css'
+import LoginPage from '../components/Login';
+
+---
+
+<Layout>
+    <div class="container">
+        <h1>Login</h1>
+        <!-- Render the SignupForm component directly -->
+        <div id="signupFormContainer">
+            <LoginPage client:load/>
+        </div>
+    </div>
+</Layout>

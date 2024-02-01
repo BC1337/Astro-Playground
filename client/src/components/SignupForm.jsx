@@ -1,7 +1,6 @@
-// components/SignupForm.jsx
-
 import React, { useState } from 'react';
-import '../styles/signup.css'
+import axios from 'axios';
+import '../styles/signup.css';
 
 const SignupForm = () => {
   const [formData, setFormData] = useState({
@@ -34,17 +33,14 @@ const SignupForm = () => {
     }
 
     try {
-      // Disable the button to prevent multiple submissions
-      // You may want to implement this later in React style
-      const response = await fetch('http://localhost:3001/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ name, username, email, password })
+      const response = await axios.post('http://localhost:3001/api/auth/signup', {
+        name,
+        username,
+        email,
+        password
       });
 
-      if (!response.ok) {
+      if (!response.status === 201) {
         throw new Error('Signup failed');
       }
 
