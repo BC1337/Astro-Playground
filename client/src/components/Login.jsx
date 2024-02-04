@@ -28,7 +28,7 @@ const LoginPage = () => {
   return (
     <div className="">
       {isLoggedIn ? (
-        <Dashboard/>
+        <Dashboard client:load/>
       ) : (
         <div>
           <h1>Login</h1>

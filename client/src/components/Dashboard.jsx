@@ -1,22 +1,57 @@
-// Dashboard.jsx
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-import React from 'react';
-import { checkAuthentication } from '../scripts/auth'; // Adjust the import path as needed
+const Dashboard = () => {
+  const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-const DashboardPage = () => {
-  const isAuthenticated = checkAuthentication();
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const token = localStorage.getItem('token');
 
-  if (!isAuthenticated) {
-    // Redirect or show a message to the user if they are not authenticated
-    return <div>You are not authenticated. Please log in.</div>;
-  }
+        if (!token) {
+          setIsLoggedIn(false);
+          setIsLoading(false);
+          return;
+        }
+
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        const response = await axios.get('http://localhost:3001/api/auth/user', config);
+        setUser(response.data.user);
+        setIsLoggedIn(true);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching user information:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   return (
     <div>
       <h1>Welcome to the Dashboard!</h1>
-      {/* Display user information here */}
+      {isLoading ? (
+        <div>Loading user information...</div>
+      ) : isLoggedIn ? (
+        <div>
+          <p>Username: {user.username}</p>
+          <p>Name: {user.name}</p>
+          <p>Email: {user.email}</p>
+        </div>
+      ) : (
+        <div>Please log in to view the dashboard.</div>
+      )}
     </div>
   );
 };
 
-export default DashboardPage;
+export default Dashboard;
