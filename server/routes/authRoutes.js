@@ -3,7 +3,7 @@
 import express from 'express';
 import { signUp, login } from '../controllers/authController.js';
 import authenticateToken from '../middleware/authMiddleware.js'; // Import your authentication middleware
-import { getUserInfo, updateUser } from '../controllers/userController.js'; // Import controller methods for user info
+import { getUserInfo, updateUser, resetPassword } from '../controllers/userController.js'; // Import controller methods for user info
 
 const router = express.Router();
 
@@ -14,5 +14,8 @@ router.post('/login', login);
 // Protected routes for user information
 router.get('/user', authenticateToken, getUserInfo); // Get user information
 router.put('/user', authenticateToken, updateUser); // Update user information
+
+// Password reset endpoint
+router.post('/reset-password', resetPassword);
 
 export default router;

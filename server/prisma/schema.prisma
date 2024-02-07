@@ -16,3 +16,10 @@ model User {
   name     String?
   email    String   @unique
 }
+
+model PasswordReset {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String
+  token     String   @unique
+  expiresAt DateTime
+}
