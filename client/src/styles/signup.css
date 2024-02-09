@@ -55,3 +55,21 @@ input {
 #signup:hover {
     background-color: #986717; /* Change background color to orange on hover */
 }
+
+
+//reset pass
+
+.reset-password-link {
+    background-color: #f9a825; /* Vibrant Orange */
+    color: #ffffff; /* White */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+  }
+  
+  .reset-password-link:hover,
+  .reset-password-link:focus {
+    background-color: #ffcc80; /* Lighter shade of Vibrant Orange on hover/focus */
+  }

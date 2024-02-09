@@ -1,8 +1,6 @@
 // userController.js
 
 import { PrismaClient } from '@prisma/client';
-import sendResetEmail from '../utils/sendResetEmail.js'; // Import the function to send reset emails
-import { v4 as uuidv4 } from 'uuid'; // Import uuid library to generate unique tokens
 
 const prisma = new PrismaClient();
 
@@ -42,42 +40,5 @@ async function getUserInfo(req, res) {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
-// Controller method to handle password reset
-async function resetPassword(req, res) {
-  const { email } = req.body;
 
-  try {
-    // Check if the user with the provided email exists
-    const user = await prisma.user.findUnique({ where: { email } });
-
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
-
-    // Generate a unique reset token using uuid
-    const resetToken = uuidv4();
-
-    // Set expiration time for the reset token (e.g., 1 hour)
-    const expirationTime = new Date();
-    expirationTime.setHours(expirationTime.getHours() + 1); // 1 hour from now
-
-    // Save the reset token and expiration time in the database
-    await prisma.passwordReset.create({
-      data: {
-        email,
-        token: resetToken,
-        expiresAt: expirationTime,
-      },
-    });
-
-    // Send email with password reset link
-    await sendResetEmail(email, resetToken);
-
-    res.status(200).json({ message: 'Password reset email sent successfully' });
-  } catch (error) {
-    console.error('Error handling password reset:', error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-}
-
-export { getUserInfo, updateUser, resetPassword };
+export { getUserInfo, updateUser};

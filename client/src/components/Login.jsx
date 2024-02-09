@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import Dashboard from '../components/Dashboard'
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleLogin = async () => {
     try {
@@ -15,9 +15,7 @@ const LoginPage = () => {
         password,
       });
       const token = response.data.token;
-      // Store the token in localStorage or sessionStorage
       localStorage.setItem('token', token);
-      // Update isLoggedIn state
       setIsLoggedIn(true);
       window.location.href = '/dashboard';
     } catch (error) {
@@ -25,10 +23,14 @@ const LoginPage = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    window.location.href = '/forgot-password-page';
+  };
+
   return (
     <div className="">
       {isLoggedIn ? (
-        <Dashboard client:load/>
+        <Dashboard client:load />
       ) : (
         <div>
           <h1>Login</h1>
@@ -54,8 +56,14 @@ const LoginPage = () => {
               />
             </div>
             <button type="submit" id="signup">Login</button>
+            <br></br>
+            <br></br>
+            <p>
+              Forgot your password? Click <button onClick={handleForgotPassword}>here</button> to reset.
+            </p>
           </form>
           {error && <p>{error}</p>}
+          {errorMessage && <p>{errorMessage}</p>}
         </div>
       )}
     </div>
