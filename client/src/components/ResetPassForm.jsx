@@ -1,35 +1,39 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom'; // Import useParams from React Router
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import '../styles/resetPassword.css'; // Import CSS file for reset password page styling
+import { useUser } from '../context/userContext';
+import '../styles/resetPassword.css';
 
 const ResetPasswordForm = () => {
-  const { token } = useParams(); // Extract the token from the URL using useParams
+  const { email } = useUser();
+  console.log('Email state:', email);
+  const [token, setToken] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const tokenFromUrl = urlParams.get('token');
+    setToken(tokenFromUrl);
+  }, []);
+
   const handleResetPassword = async () => {
     try {
-      // Add validation logic for new password and confirm password fields
-
-      // Check if new password matches confirm password
       if (newPassword !== confirmPassword) {
         setErrorMessage('Passwords do not match');
         return;
       }
 
-      // Make API call to reset password with token
-      const response = await axios.post(`http://localhost:3001/api/auth/reset-password/${token}`, {
+      const response = await axios.post('http://localhost:3001/api/auth/reset-password', {
+        token,
+        email,
         newPassword,
         confirmPassword,
       });
 
-      // Display success message if password reset is successful
       setSuccessMessage(response.data.message);
     } catch (error) {
-      // Display error message if there's an error with password reset
       setErrorMessage('Failed to reset password. Please try again.');
       console.error('Error resetting password:', error);
     }

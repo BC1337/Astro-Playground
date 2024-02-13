@@ -1,11 +1,10 @@
 ---
 import { ViewTransitions } from 'astro:transitions';
 import Header from '../components/Header.astro';
+import { UserProvider } from '../context/userContext.jsx';
 import '../styles/global.css';
 
 const { pageTitle } = Astro.props;
-
-
 ---
 
 <html lang="en">
@@ -20,14 +19,16 @@ const { pageTitle } = Astro.props;
 </head>
 
 <body>
-    <Header />
+    <UserProvider>
+        <Header />
 
-    <h1 transition:animate="slide">{pageTitle}</h1>
-    <slot />
+        <h1 transition:animate="slide">{pageTitle}</h1>
+        <slot />
 
-    <script>
-        import "../scripts/menu.js"
-    </script>
+        <script>
+            import "../scripts/menu.js"
+        </script>
+    </UserProvider>
 </body>
 
 </html>

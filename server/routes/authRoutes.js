@@ -21,4 +21,5 @@ router.post('/reset-password', resetPassword); // Initiate password reset proces
 router.get('/reset-password/:token', verifyToken); // Verify password reset token
 router.post('/reset-password/:token', updatePassword); // Update password with valid token
 
+
 export default router;
