@@ -51,16 +51,27 @@ const ResetPasswordForm = () => {
   return (
     <div className="reset-password-container">
       <h1>Password Reset</h1>
-      <p>Resetting password for: {email}</p>
-      <input
-        type="password"
-        placeholder="New Password"
-        value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
-      />
-      {errorMessage && <div className="error-message">{errorMessage}</div>}
-      {successMessage && <div className="success-message">{successMessage}</div>}
-      <button onClick={handleResetPassword}>Reset Password</button>
+      <form onSubmit={handleResetPassword}>
+        <div className="form-group">
+          <label htmlFor="newPassword">New Password</label>
+          <input
+            type="password"
+            id="newPassword"
+            className="form-control"
+            placeholder="Enter your new password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            required
+          />
+        </div>
+        <div className="form-group">
+          <p className="email-info">Password reset for:</p>
+          <p className="user-email">{email}</p>
+        </div>
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
+        {successMessage && <div className="success-message">{successMessage}</div>}
+        <button type="submit" className="btn btn-primary">Reset Password</button>
+      </form>
     </div>
   );
 };

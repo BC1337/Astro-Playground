@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     height: 80vh;
-    background-color: rgba(199, 180, 180, 0.1); /* Adjust background color to match the signup page */
+    background-color: #f9f6e7; /* Adjust background color to match the signup page */
     width: 100%;
     margin-top: 50px;
 }
