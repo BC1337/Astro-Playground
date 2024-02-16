@@ -1,13 +1,8 @@
 import nodemailer from 'nodemailer';
-import { generateToken } from './generateToken.js';
 
-
-
-async function sendResetEmail(email) {
+// Modified function with changes highlighted
+async function sendResetEmail(email, token) {
   try {
-    // Generate a unique token for the password reset request
-    const token = generateToken({ email }); // Pass email as the payload
-
     // Create a Nodemailer transporter with your SMTP configuration
     const transporter = nodemailer.createTransport({
       host: 'smtp.gmail.com',
