@@ -1,53 +1,90 @@
 /* dashboard.css */
 
+/* Base styles */
+body {
+  color: #ffffff; /* White text color for better contrast */
+}
+
 .dashboard-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .user-card {
-    background-color: #f0f0f0;
-    border-radius: 8px;
-    padding: 20px;
-    margin-top: 20px;
-  }
-  
-  .user-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .edit-button, .cancel-button, .update-button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .cancel-button {
-    background-color: #dc3545; /* Red color for the cancel button */
-  }
-  
-  .user-info input[type="text"],
-  .user-info input[type="email"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .update-button {
-    background-color: #28a745;
-    color: #fff;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
+  max-width: 600px;
+  margin: 50px auto; /* Adjusted margin for a centered look */
+  padding: 20px;
+  background-color: #2c3e50; /* Deep blue background for the container */
+  border-radius: 12px; /* Rounded corners for a softer look */
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); /* Subtle box shadow for depth */
+}
+
+.user-card {
+  background-color: #2c3e50; /* Same as the container background */
+  border-radius: 12px;
+  overflow: hidden; /* Ensure rounded corners apply to child elements */
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Soft box shadow */
+  padding: 20px; /* Added padding for content spacing */
+}
+
+.user-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 15px; /* Add some spacing between header and user info */
+  border-bottom: 1px solid #ffffff; /* White divider line beneath header */
+}
+
+/* Text styles */
+.user-info p strong {
+  color: #f9a825; /* Vibrant orange color for the titles */
+}
+
+h1 {
+  font-size: 24px;
+  color: white; /* Larger font size for a more prominent welcome message */
+}
+
+/* Button styles */
+.edit-button, .cancel-button, .update-button, .upload-button {
+  background-color: #f9a825; /* Vibrant orange button background */
+  color: #1c2a36; /* Dark navy button text color */
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: #dc3545; /* Red color for the cancel button */
+}
+
+.update-button {
+  background-color: #28a745; /* Green color for the update button */
+}
+
+/* Input styles */
+.user-info input[type="text"],
+.user-info input[type="email"] {
+  width: calc(100% - 2rem); /* Adjusted width with reduced padding */
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #2c3e50; /* Same as the container background */
+  color: #ffffff; /* White text color */
+}
+
+/* Avatar styles */
+.avatar-container {
+  width: 100px; /* Adjust the width and height of the container to match the avatar size */
+  height: 100px;
+  border-radius: 50%; /* Makes the container circular */
+  overflow: hidden; /* Clips the avatar image to fit within the circular container */
+  margin-right: 20px; /* Add some space between the avatar and user info */
+}
+
+.avatar {
+  width: 100%; /* Ensures the avatar fills the circular container */
+  height: auto;
+}
+
+.avatar-info {
+  display: flex;
+  align-items: center;
+}

@@ -2,7 +2,7 @@
 
 import express from 'express';
 import { signUp, login } from '../controllers/authController.js';
-import { getUserInfo, updateUser } from '../controllers/userController.js';
+import { getUserInfo, updateUser, uploadAvatar } from '../controllers/userController.js';
 import { initiatePasswordReset, resetPassword } from '../controllers/resetPasswordController.js'; // Import controller methods for password reset
 import authenticateToken from '../middleware/authMiddleware.js'; // Import your authentication middleware
 import sendResetEmail from '../utils/sendResetEmail.js'; // Import sendResetEmail function
@@ -16,6 +16,8 @@ router.post('/login', login);
 // Protected routes for user information
 router.get('/user', authenticateToken, getUserInfo); // Get user information
 router.put('/user', authenticateToken, updateUser); // Update user information
+router.put('/user/avatar', authenticateToken, uploadAvatar); // Route for updating user avatar
+
 
 // Password reset routes
 router.post('/reset-password', initiatePasswordReset); // Initiate password reset process

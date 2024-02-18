@@ -15,6 +15,7 @@ model User {
   password String
   name     String?
   email    String   @unique
+  avatar   String?  @default("/public/images/blankAvatar.webp") // Default avatar image path
 }
 
 model PasswordReset {
