@@ -7,6 +7,8 @@ import SSEManager from '../utils/sseManager.js';
 
 import multer from 'multer';
 import dotenv from 'dotenv'; // Import dotenv
+import fs from 'fs';
+
 
 
 dotenv.config(); // Load environment variables from .env file
@@ -53,12 +55,11 @@ async function getUserInfo(req, res) {
 async function uploadAvatar(req, res) {
   try {
     upload.single('avatar')(req, res, async function (err) {
+      // Error handling for file upload
       if (err instanceof multer.MulterError) {
-        // A Multer error occurred during file upload
         console.error('Multer error:', err);
         return res.status(500).json({ message: 'Failed to upload avatar. Please try again.' });
       } else if (err) {
-        // An unknown error occurred
         console.error('Unknown error:', err);
         return res.status(500).json({ message: 'An error occurred. Please try again.' });
       }
@@ -67,24 +68,44 @@ async function uploadAvatar(req, res) {
       const avatarPath = req.file.path; // Get the path of the uploaded avatar image
       const userId = req.user.userId; // Extract userId from the authenticated user
 
-      // Update user's avatar URL in the database
-      const updatedUser = await prisma.user.update({
-        where: { id: userId },
-        data: { avatar: avatarPath }, // Update avatar path in the database
-      });
+      try {
+        // Fetch the user to check if a previous avatar exists
+        const user = await prisma.user.findUnique({ where: { id: userId }, select: { avatar: true } });
 
-      // Broadcast avatar update to connected clients
-      const userUpdate = await prisma.user.findUnique({ where: { id: userId } });
-      userUpdate.avatar = `http://localhost:3001/${userUpdate.avatar}`; // new test
-      console.log('Sending SSE event: avatar-update', JSON.stringify(userUpdate));
-      SSEManager.sendEvent('avatar-update', JSON.stringify(userUpdate));
+        if (user.avatar && user.avatar !== '/images/blankAvatar.webp') {
+          // If a previous avatar exists and it's not the default image, delete it from the /images/ folder
+          fs.unlink(user.avatar, async (err) => {
+            if (err) {
+              console.error('Error deleting previous avatar:', err);
+            } else {
+              console.log('Previous avatar deleted successfully');
+            }
+          });
+        }
 
-      res.status(200).json({ message: 'Avatar updated successfully', user: updatedUser });
+        // Update user's avatar URL in the database
+        const updatedUser = await prisma.user.update({
+          where: { id: userId },
+          data: { avatar: avatarPath }, // Update avatar path in the database
+        });
+
+        // Broadcast avatar update to connected clients
+        const userUpdate = await prisma.user.findUnique({ where: { id: userId } });
+        userUpdate.avatar = `http://localhost:3001/${userUpdate.avatar}`; // new test
+        console.log('Sending SSE event: avatar-update', JSON.stringify(userUpdate));
+        SSEManager.sendEvent('avatar-update', JSON.stringify(userUpdate));
+
+        res.status(200).json({ message: 'Avatar updated successfully', user: updatedUser });
+      } catch (error) {
+        console.error('Error updating user information:', error);
+        res.status(500).json({ message: 'Failed to update user information. Please try again.' });
+      }
     });
   } catch (error) {
     console.error('Error uploading avatar:', error);
     res.status(500).json({ message: 'Failed to upload avatar. Please try again.' });
   }
 }
+
 
 export { getUserInfo, updateUser, uploadAvatar};
