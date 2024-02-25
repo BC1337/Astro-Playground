@@ -30,7 +30,7 @@ async function initiatePasswordReset(req, res) {
 
     // Generate a JWT token with the user's email
     const token = generateToken({ email });
-    console.log('Generated token:', token);
+    // console.log('Generated token:', token);
 
     // Send the password reset email with the token
     await sendResetEmail(email, token);
@@ -52,7 +52,7 @@ async function resetPassword(req, res) {
 
     // Verify the JWT token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log('Decoded token:', decoded);
+    // console.log('Decoded token:', decoded);
 
     // Check if the decoded email matches the request email
     if (decoded.email !== email) {

@@ -6,6 +6,7 @@ import { getUserInfo, updateUser, uploadAvatar } from '../controllers/userContro
 import { initiatePasswordReset, resetPassword } from '../controllers/resetPasswordController.js'; // Import controller methods for password reset
 import authenticateToken from '../middleware/authMiddleware.js'; // Import your authentication middleware
 import sendResetEmail from '../utils/sendResetEmail.js'; // Import sendResetEmail function
+import sseManager from '../utils/sseManager.js'; // Import SSE manager
 
 const router = express.Router();
 
@@ -17,6 +18,15 @@ router.post('/login', login);
 router.get('/user', authenticateToken, getUserInfo); // Get user information
 router.put('/user', authenticateToken, updateUser); // Update user information
 router.put('/user/avatar', authenticateToken, uploadAvatar); // Route for updating user avatar
+
+// SSE endpoint
+router.get('/sse', (req, res) => {
+    sseManager.addConnection(res);
+  
+    req.on('close', () => {
+      sseManager.removeConnection(res);
+    });
+  });
 
 
 // Password reset routes

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/dashboard.css'; // Import CSS file for dashboard styling
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 
@@ -18,7 +17,25 @@ const Dashboard = () => {
   const [avatarUrl, setAvatarUrl] = useState('');
   const [newAvatar, setNewAvatar] = useState(null); // State for the new avatar image
 
+  useEffect(() => {
+    const eventSource = new EventSource('http://localhost:3001/api/auth/sse');
   
+    eventSource.onmessage = (event) => {
+      const userData = JSON.parse(event.data);
+      const newAvatarUrl = userData.user.avatar + `?${new Date().getTime()}`;
+      console.log('New avatar URL:', newAvatarUrl); // Log the new avatar URL
+      setAvatarUrl(newAvatarUrl);
+    };
+  
+    eventSource.onerror = (error) => {
+      console.error('SSE connection error:', error);
+      // Handle SSE connection error
+    };
+  
+    return () => {
+      eventSource.close();
+    };
+  }, []);
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -38,16 +55,9 @@ const Dashboard = () => {
         };
   
         const response = await axios.get('http://localhost:3001/api/auth/user', config);
-        console.log('User Data:', response.data.user);
         setUser(response.data.user);
         setUpdatedUser(response.data.user);
-  
-        // Construct the complete avatar URL
-        const avatarURL = `http://localhost:3001/${response.data.user.avatar}?${new Date().getTime()}`; // Update avatar URL construction
-  
-        setAvatarUrl(avatarURL); // Set the complete avatar URL
-        console.log('Avatar URL:', avatarURL); // Log the avatar URL
-  
+        setAvatarUrl(`http://localhost:3001/${response.data.user.avatar}?${new Date().getTime()}`);// edited
         setIsLoggedIn(true);
         setIsLoading(false);
       } catch (error) {
@@ -81,9 +91,8 @@ const Dashboard = () => {
       };
       await axios.put('http://localhost:3001/api/auth/user', updatedUser, config);
       alert('User information updated successfully!');
-      // Update the user state to reflect the changes
       setUser(updatedUser);
-      setIsEditing(false); // Turn off editing mode
+      setIsEditing(false);
     } catch (error) {
       console.error('Error updating user information:', error);
       alert('Failed to update user information. Please try again.');
@@ -91,14 +100,13 @@ const Dashboard = () => {
   };
 
   const handleCancel = () => {
-    setUpdatedUser(user); // Revert back to the original user information
-    setIsEditing(false); // Turn off editing mode
+    setUpdatedUser(user);
+    setIsEditing(false);
   };
 
-  // Function to handle file change
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setNewAvatar(file); // Store the selected file in state
+    setNewAvatar(file);
   };
 
   const handleAvatarUpload = async () => {
@@ -114,12 +122,9 @@ const Dashboard = () => {
         },
       };
       const response = await axios.put('http://localhost:3001/api/auth/user/avatar', formData, config);
+      const avatarFullPath = `http://localhost:3001/${response.data.user.avatar}`; // Construct full URL
+      setAvatarUrl(avatarFullPath);
       console.log('Avatar upload response:', response.data);
-
-      // Update the avatar URL state with the new avatar URL
-      setAvatarUrl(response.data.user.avatar + `?${new Date().getTime()}`);
-
-      // Reset the newAvatar state to null after successful upload
       setNewAvatar(null);
     } catch (error) {
       console.error('Error uploading avatar:', error);
@@ -145,7 +150,6 @@ const Dashboard = () => {
                 <button className="cancel-button" onClick={handleCancel}>
                   <FontAwesomeIcon icon={faTimes} />
                 </button>
-
                 <button className="update-button" onClick={handleUpdate}>
                   <FontAwesomeIcon icon={faCheck} />
                 </button>
@@ -153,11 +157,9 @@ const Dashboard = () => {
             )}
           </div>
           <div className="user-info">
-            {/* Display Avatar */}
             <div className="avatar-container">
               <img src={avatarUrl} alt="User Avatar" className="avatar" />
             </div>
-            {/* File input for avatar upload */}
             {isEditing && (
               <div>
                 <input type="file" onChange={handleFileChange} />

@@ -1,8 +1,15 @@
 // userController.js
 
 import { PrismaClient } from '@prisma/client';
+
 import upload from '../utils/multerConfig.js';
+import SSEManager from '../utils/sseManager.js';
+
 import multer from 'multer';
+import dotenv from 'dotenv'; // Import dotenv
+
+
+dotenv.config(); // Load environment variables from .env file
 
 const prisma = new PrismaClient();
 
@@ -65,6 +72,12 @@ async function uploadAvatar(req, res) {
         where: { id: userId },
         data: { avatar: avatarPath }, // Update avatar path in the database
       });
+
+      // Broadcast avatar update to connected clients
+      const userUpdate = await prisma.user.findUnique({ where: { id: userId } });
+      userUpdate.avatar = `http://localhost:3001/${userUpdate.avatar}`; // new test
+      console.log('Sending SSE event: avatar-update', JSON.stringify(userUpdate));
+      SSEManager.sendEvent('avatar-update', JSON.stringify(userUpdate));
 
       res.status(200).json({ message: 'Avatar updated successfully', user: updatedUser });
     });
