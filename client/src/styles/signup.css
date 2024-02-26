@@ -93,3 +93,38 @@ input {
     border-radius: 4px; /* Rounded corners */
     box-shadow: 0 0 5px rgba(255, 77, 77, 0.5); /* Soft shadow effect */
   }
+
+  //password strength
+
+  .password-strength-meter {
+    background-color: #f0f0f0;
+    margin-top: 10px;
+    height: 20px;
+    border-radius: 5px;
+    position: relative;
+    border: 1px solid #ccc;
+  }
+  
+  .password-strength-meter-bar {
+    background-color: #ff6666; /* Very Weak */
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+  }
+  
+  .password-strength-meter-bar.weak {
+    background-color: #ffcc66; /* Weak */
+  }
+  
+  .password-strength-meter-bar.fair {
+    background-color: #ffff66; /* Fair */
+  }
+  
+  .password-strength-meter-bar.good {
+    background-color: #99ff99; /* Good */
+  }
+  
+  .password-strength-meter-bar.strong {
+    background-color: #66ff66; /* Strong */
+  }
+  

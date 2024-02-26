@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import zxcvbn from 'zxcvbn'; // Import zxcvbn library
 import '../styles/signup.css';
 
 const SignupForm = () => {
@@ -12,7 +13,50 @@ const SignupForm = () => {
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const getPasswordStrength = () => {
+    if (!formData.password) return 0;
+    const result = zxcvbn(formData.password);
+    return result.score;
+  };
+
+  const getMeterColor = () => {
+    const strength = getPasswordStrength();
+    switch (strength) {
+      case 0:
+        return 'transparent'; // Very Weak - Gray
+      case 1:
+        return '#ff3333'; // Weak - Red
+      case 2:
+        return '#ff9900'; // Fair - Orange
+      case 3:
+        return '#ffff66'; // Good - Yellow
+      case 4:
+        return '#66cc66'; // Strong - Green
+      default:
+        return '#cccccc'; // Gray
+    }
+  };
+
+  const getStrengthText = () => {
+    const strength = getPasswordStrength();
+    switch (strength) {
+      case 0:
+        return '';
+      case 1:
+        return 'Weak';
+      case 2:
+        return 'Fair';
+      case 3:
+        return 'Good';
+      case 4:
+        return 'Strong';
+      default:
+        return 'Unknown';
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -78,6 +122,34 @@ const SignupForm = () => {
       <div>
         <label htmlFor="password">Password</label>
         <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} />
+        
+        <div className="password-strength-text">
+          {getStrengthText()}
+        </div>
+        <div 
+          className="password-strength-meter"
+          style={{ 
+            backgroundColor: '#f0f0f0', 
+            height: '12px', 
+            borderRadius: '5px', 
+            position: 'relative',
+            border: '1px solid #ccc',
+            marginBottom: '10px' 
+          }}
+        >
+          <div
+            className="password-strength-meter-bar"
+            style={{ 
+              width: `${(getPasswordStrength() + 1) * 20}%`, 
+              backgroundColor: getMeterColor(), 
+              height: '100%', 
+              borderRadius: '5px',
+              transition: 'width 0.3s ease',
+              
+            }}
+          />
+        </div>
+        
       </div>
       <button type="submit" id="signup">Sign Up</button>
       {error && <p className="error-message">{error}</p>}
