@@ -9,6 +9,7 @@ const SignupForm = () => {
     email: '',
     password: ''
   });
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,14 +22,14 @@ const SignupForm = () => {
 
     // Client-side validation
     if (!name || !username || !email || !password) {
-      alert('Please fill out all fields');
+      setError('Please fill out all fields');
       return;
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      alert('Please enter a valid email address');
+      setError('Please enter a valid email address');
       return;
     }
 
@@ -56,12 +57,12 @@ const SignupForm = () => {
       // You can redirect the user to another page or perform any other action here
     } catch (error) {
       console.error('Error:', error.message);
-      alert('Signup failed');
+      setError('Signup failed');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="signup-form">
       <div>
         <label htmlFor="name">Name</label>
         <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
@@ -78,9 +79,8 @@ const SignupForm = () => {
         <label htmlFor="password">Password</label>
         <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} />
       </div>
-      <div>
-        <button type="submit" id="signup">Sign Up</button>
-      </div>
+      <button type="submit" id="signup">Sign Up</button>
+      {error && <p className="error-message">{error}</p>}
     </form>
   );
 };

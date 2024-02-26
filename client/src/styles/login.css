@@ -21,8 +21,10 @@ form {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 12px 12px rgba(0, 0, 0, 0.5);
-    width: 100%;
-    max-width: 400px; /* Adjust the max-width as needed */
+    width: 100vw;
+    height: 45vh;
+    max-width: 450px; /* Adjust the max-width as needed */
+    /* Other styles remain unchanged */
 }
 
 label {
@@ -55,12 +57,6 @@ input {
 
 #signup:hover {
     background-color: #986717; /* Change background color to orange on hover */
-}
-
-.signup-form {
-    width: 33vw; /* Adjust the width as needed */
-    max-width: 500px; /* Adjust the max-width as needed */
-    /* Add other styles as needed */
 }
 
 
