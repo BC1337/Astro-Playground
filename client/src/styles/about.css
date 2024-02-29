@@ -1,0 +1,79 @@
+/* about.css */
+
+/* Main styles for the page */
+main {
+    padding: 20px;
+    color: #333; /* Dark gray text color */
+}
+
+/* Styles for About Us section */
+#about-us {
+    margin-bottom: 40px;
+}
+
+#about-us h2 {
+    font-size: 2.5rem;
+    color: orange; /* Orange text color */
+    margin-bottom: 20px;
+}
+
+#about-us p {
+    font-size: 1.2rem;
+    color: #555; /* Dark gray text color */
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+#about-us p strong {
+    font-weight: bold;
+    color: #333; /* Dark gray text color */
+}
+
+/* Styles for Contact Us section */
+#contact {
+    margin-bottom: 40px;
+}
+
+#contact h2 {
+    font-size: 2.5rem;
+    color: orange; /* Orange text color */
+    margin-bottom: 20px;
+}
+
+#contact p {
+    font-size: 1.2rem;
+    color: #333; /* Dark gray text color */
+    line-height: 1.6;
+}
+
+#contact p strong {
+    font-weight: bold;
+    color: #333; /* Dark gray text color */
+}
+
+/* Styles for FAQ section */
+#faq {
+    margin-bottom: 40px;
+}
+
+#faq h2 {
+    font-size: 2.5rem;
+    color: orange; /* Orange text color */
+    margin-bottom: 20px;
+}
+
+#faq ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+#faq ul li {
+    font-size: 1.2rem;
+    color: #333; /* Dark gray text color */
+    margin-bottom: 15px;
+}
+
+#faq ul li strong {
+    font-weight: bold;
+    color: orange; /* Orange text color */
+}

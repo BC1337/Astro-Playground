@@ -1,12 +1,53 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import '../styles/landingpage.css'
 
 ---
 
-<Layout title="Welcome to Astro.">
-	<main>
-		<h1>Welcome to the shit show</h1>
-	</main>
+<Layout title="Welcome to Your Fitness and Wellness Hub">
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Welcome to Your Fitness and Wellness Journey</h1>
+                <p>Transform your life with our comprehensive resources and support.</p>
+                <a href="/signup" class="cta-button">Get Started</a>
+            </div>
+        </section>
+
+        <!-- Section 1: Customized Workout Plans -->
+        <section id="feature-content" class="feature-section">
+            <div class="feature-content">
+                <h2>Customized Workout Plans</h2>
+                <p>Get personalized workout plans tailored to your fitness goals and preferences.</p>
+            </div>
+            <div class="feature-image">
+                <img src="https://images.pexels.com/photos/416717/pexels-photo-416717.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Customized Workout Plans">
+            </div>
+        </section>
+
+        <!-- Section 2: New Diet Ideas -->
+        <section class="feature-section alternate">
+            <div class="feature-content">
+                <h2>New Diet Ideas</h2>
+                <p>Explore innovative and healthy diet ideas to fuel your body and mind.</p>
+            </div>
+            <div class="feature-image">
+                <img src="https://images.pexels.com/photos/1640768/pexels-photo-1640768.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="New Diet Ideas">
+            </div>
+        </section>
+
+        <!-- Section 3: Mindfulness Practices -->
+        <section class="feature-section">
+            <div class="feature-content">
+                <h2>Mindfulness Practices</h2>
+                <p>Learn mindfulness techniques to reduce stress, improve focus, and enhance overall well-being.</p>
+            </div>
+            <div class="feature-image">
+                <img src="https://images.pexels.com/photos/312839/pexels-photo-312839.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="Mindfulness Practices">
+            </div>
+        </section>
+    </main>
 </Layout>
 
 <style>
@@ -34,5 +75,8 @@ import Layout from '../layouts/Layout.astro';
 		line-height: 1;
 		text-align: center;
 		margin-bottom: 1em;
+	}
+	p{
+		color: black;
 	}
 </style>

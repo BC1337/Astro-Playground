@@ -1,0 +1,113 @@
+/* styles.css */
+
+body {
+    color: #333; /* Dark gray text color */
+    font-family: Arial, sans-serif; /* Choose a suitable font */
+}
+
+.hero {
+    background-color: #f9a825; /* Vibrant orange background */
+    padding: 100px 0;
+    text-align: center;
+    color: orange; /* Update to your desired orange color */
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #333; /* Dark gray button background */
+    color: #fff; /* White text color */
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #555; /* Darker shade of gray on hover */
+}
+
+/* Add the following CSS to your existing stylesheet */
+
+.feature-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    margin-bottom: 3rem; /* Increase margin between sections */
+}
+
+.feature-section.alternate .feature-content {
+    order: 2; /* Change the order of the content */
+}
+
+.feature-section.alternate .feature-image {
+    order: 1; /* Change the order of the image */
+}
+
+.feature-content, .feature-image {
+    flex: 1;
+    margin: 0 10px; /* Add margin to create space between text and image */
+}
+
+.feature-content h2 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem; /* Reduce bottom margin */
+    color: orange; /* Update to your desired orange color */
+    line-height: 1.2; /* Adjust line height */
+}
+
+.feature-content p {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.feature-image img {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    border-radius: 8px;
+}
+
+//testimonials
+
+.testimonials {
+    text-align: center;
+    margin-top: 3rem;
+  }
+  
+  .testimonials h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .carousel {
+    width: 80%;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+  
+  .carousel-inner {
+    display: flex;
+    transition: transform 0.5s ease;
+  }
+  
+  .testimonial {
+    flex: 0 0 100%;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .author {
+    font-style: italic;
+  }
+  
