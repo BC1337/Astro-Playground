@@ -18,6 +18,7 @@ const LoginPage = () => {
     }
 
     // Comprehensive username format check
+    
     const usernameRegex = /^[a-zA-Z0-9_]{3,16}$/;
     if (!usernameRegex.test(username)) {
       setError('Invalid username format. Use alphanumeric characters and underscores (3-16 characters).');
@@ -25,11 +26,13 @@ const LoginPage = () => {
     }
 
     // Comprehensive password policy enforcement
-    const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
-    if (!passwordRegex.test(password)) {
-      setError('Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number.');
-      return;
-    }
+
+    // const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
+    // if (!passwordRegex.test(password)) {
+    //   setError('Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number.');
+    //   return;
+    // }
+
     try {
       const response = await axios.post('http://localhost:3001/api/auth/login', {
         username,

@@ -2,7 +2,7 @@
 
 import express from 'express';
 import { signUp, login } from '../controllers/authController.js';
-import { getUserInfo, updateUser, uploadAvatar } from '../controllers/userController.js';
+import { getUserInfo, updateUser, uploadAvatar, changePassword } from '../controllers/userController.js';
 import { initiatePasswordReset, resetPassword } from '../controllers/resetPasswordController.js'; // Import controller methods for password reset
 import authenticateToken from '../middleware/authMiddleware.js'; // Import your authentication middleware
 import sendResetEmail from '../utils/sendResetEmail.js'; // Import sendResetEmail function
@@ -18,6 +18,7 @@ router.post('/login', login);
 router.get('/user', authenticateToken, getUserInfo); // Get user information
 router.put('/user', authenticateToken, updateUser); // Update user information
 router.put('/user/avatar', authenticateToken, uploadAvatar); // Route for updating user avatar
+router.put('/user/password', authenticateToken, changePassword); // Add route for changing password
 
 // SSE endpoint
 router.get('/sse', (req, res) => {

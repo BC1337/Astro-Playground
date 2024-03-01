@@ -9,6 +9,7 @@ import multer from 'multer';
 import dotenv from 'dotenv'; // Import dotenv
 import fs from 'fs';
 
+import bcrypt from 'bcrypt'; // Import bcrypt
 
 
 dotenv.config(); // Load environment variables from .env file
@@ -107,5 +108,40 @@ async function uploadAvatar(req, res) {
   }
 }
 
+async function changePassword(req, res) {
+  try {
+    const userId = req.user.userId; // Extract userId from the authenticated user
+    const { currentPassword, newPassword, confirmNewPassword } = req.body; // Extract password change details from request body
 
-export { getUserInfo, updateUser, uploadAvatar};
+    // Fetch the user from the database
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { password: true } });
+
+    // Check if the provided current password matches the user's actual password
+    const passwordMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!passwordMatch) {
+      return res.status(400).json({ message: 'Current password is incorrect' });
+    }
+
+    // Check if the new password matches the confirm new password
+    if (newPassword !== confirmNewPassword) {
+      return res.status(400).json({ message: 'New passwords do not match' });
+    }
+
+    // Hash the new password before updating it in the database
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Update the user's password in the database
+    await prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword }
+    });
+
+    res.status(200).json({ message: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.status(500).json({ message: 'Failed to change password. Please try again.' });
+  }
+}
+
+
+export { getUserInfo, updateUser, uploadAvatar, changePassword};

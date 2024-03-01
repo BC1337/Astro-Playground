@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/dashboard.css'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faCheck, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -16,6 +16,12 @@ const Dashboard = () => {
   });
   const [avatarUrl, setAvatarUrl] = useState('');
   const [newAvatar, setNewAvatar] = useState(null); // State for the new avatar image
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [passwordChangeError, setPasswordChangeError] = useState('');
+  const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
+  const [showPasswordChange, setShowPasswordChange] = useState(false);
 
   useEffect(() => {
     const eventSource = new EventSource('http://localhost:3001/api/auth/sse');
@@ -57,7 +63,7 @@ const Dashboard = () => {
         const response = await axios.get('http://localhost:3001/api/auth/user', config);
         setUser(response.data.user);
         setUpdatedUser(response.data.user);
-        setAvatarUrl(`http://localhost:3001/${response.data.user.avatar}?${new Date().getTime()}`);// edited
+        setAvatarUrl(`http://localhost:3001/${response.data.user.avatar}?${new Date().getTime()}`);
         setIsLoggedIn(true);
         setIsLoading(false);
       } catch (error) {
@@ -71,6 +77,7 @@ const Dashboard = () => {
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
+    setShowPasswordChange(false); // Close the password change form when toggling edit mode
   };
 
   const handleInputChange = (event) => {
@@ -122,7 +129,7 @@ const Dashboard = () => {
         },
       };
       const response = await axios.put('http://localhost:3001/api/auth/user/avatar', formData, config);
-      const avatarFullPath = `http://localhost:3001/${response.data.user.avatar}`; // Construct full URL
+      const avatarFullPath = `http://localhost:3001/${response.data.user.avatar}`;
       setAvatarUrl(avatarFullPath);
       console.log('Avatar upload response:', response.data);
       setNewAvatar(null);
@@ -132,8 +139,47 @@ const Dashboard = () => {
     }
   };
 
+  const handleSignOut = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/'; // Redirect to the sign-in page
+  };
+
+  const handlePasswordChange = async () => {
+    try {
+      if (newPassword !== confirmNewPassword) {
+        setPasswordChangeError('New passwords do not match.');
+        return;
+      }
+      const token = localStorage.getItem('token');
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      const payload = {
+        currentPassword,
+        newPassword,
+        confirmNewPassword, // Include confirmNewPassword in the payload
+      };
+      const response = await axios.put(
+        'http://localhost:3001/api/auth/user/password',
+        payload,
+        config
+      );
+      setPasswordChangeSuccess(true);
+      setPasswordChangeError('');
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmNewPassword('');
+    } catch (error) {
+      setPasswordChangeError('Failed to change password. Please try again.');
+    }
+  };
   return (
     <div className="dashboard-container">
+      <div className="sign-out-button" onClick={handleSignOut}>
+        <FontAwesomeIcon icon={faSignOutAlt} />
+      </div>
       <h1>Welcome to the Dashboard!</h1>
       {isLoading ? (
         <div>Loading user information...</div>
@@ -147,12 +193,11 @@ const Dashboard = () => {
               </button>
             ) : (
               <div>
-                <button className="cancel-button" onClick={handleCancel}>
-                  <FontAwesomeIcon icon={faTimes} />
-                </button>
-                <button className="update-button" onClick={handleUpdate}>
-                  <FontAwesomeIcon icon={faCheck} />
-                </button>
+                {!showPasswordChange && (
+                  <button className="change-password-button" onClick={() => setShowPasswordChange(true)}>
+                    Edit Password
+                  </button>
+                )}
               </div>
             )}
           </div>
@@ -208,6 +253,46 @@ const Dashboard = () => {
               )}
             </p>
           </div>
+          {showPasswordChange && (
+            <div className="password-change-form">
+              <h2 className="password-change-title"><strong>Password Change</strong></h2>
+              <input
+                type="password"
+                className="password-input"
+                placeholder="Current Password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+              />
+              <input
+                type="password"
+                className="password-input"
+                placeholder="New Password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+              <input
+                type="password"
+                className="password-input"
+                placeholder="Confirm New Password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+              />
+              <button className="edit-button" onClick={handlePasswordChange}>Change Password</button>
+              {passwordChangeError && <div className="error-message">{passwordChangeError}</div>}
+              {passwordChangeSuccess && <div>Password changed successfully!</div>}
+            </div>
+          )}
+          {/* Move Check and X buttons to the bottom right corner */}
+          {isEditing && (
+            <div className="edit-buttons-container">
+              <button className="cancel-button" onClick={handleCancel}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+              <button className="update-button" onClick={handleUpdate}>
+                <FontAwesomeIcon icon={faCheck} />
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div>Please log in to view the dashboard.</div>

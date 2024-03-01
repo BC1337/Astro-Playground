@@ -6,28 +6,29 @@ body {
 }
 
 .dashboard-container {
+  position: relative;
   max-width: 600px;
-  margin: 50px auto; /* Adjusted margin for a centered look */
+  margin: 50px auto;
   padding: 20px;
-  background-color: #2c3e50; /* Deep blue background for the container */
-  border-radius: 12px; /* Rounded corners for a softer look */
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); /* Subtle box shadow for depth */
+  background-color: #2c3e50;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .user-card {
-  background-color: #2c3e50; /* Same as the container background */
+  background-color: #2c3e50;
   border-radius: 12px;
-  overflow: hidden; /* Ensure rounded corners apply to child elements */
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Soft box shadow */
-  padding: 20px; /* Added padding for content spacing */
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+  padding: 20px;
 }
 
 .user-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 15px; /* Add some spacing between header and user info */
-  border-bottom: 1px solid #ffffff; /* White divider line beneath header */
+  padding-bottom: 15px;
+  border-bottom: 1px solid #ffffff;
 }
 
 /* Text styles */
@@ -37,50 +38,56 @@ body {
 
 h1 {
   font-size: 24px;
-  color: white; /* Larger font size for a more prominent welcome message */
+  color: white;
 }
 
 /* Button styles */
-.edit-button, .cancel-button, .update-button, .upload-button {
-  background-color: #f9a825; /* Vibrant orange button background */
-  color: #1c2a36; /* Dark navy button text color */
+.edit-button,
+.cancel-button,
+.update-button,
+.upload-button,
+.change-password-button {
+  background-color: #f9a825;
+  color: #1c2a36;
   border: none;
   padding: 8px 16px;
   border-radius: 4px;
   cursor: pointer;
+  margin-top: 10px;
 }
 
 .cancel-button {
-  background-color: #dc3545; /* Red color for the cancel button */
+  background-color: #dc3545;
 }
 
 .update-button {
-  background-color: #28a745; /* Green color for the update button */
+  background-color: #28a745;
 }
 
 /* Input styles */
 .user-info input[type="text"],
-.user-info input[type="email"] {
-  width: calc(100% - 2rem); /* Adjusted width with reduced padding */
+.user-info input[type="email"],
+.password-input {
+  width: calc(100% - 2rem);
   padding: 8px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  background-color: #2c3e50; /* Same as the container background */
-  color: #ffffff; /* White text color */
+  background-color: #2c3e50;
+  color: #ffffff;
 }
 
 /* Avatar styles */
 .avatar-container {
-  width: 100px; /* Adjust the width and height of the container to match the avatar size */
+  width: 100px;
   height: 100px;
-  border-radius: 50%; /* Makes the container circular */
-  overflow: hidden; /* Clips the avatar image to fit within the circular container */
-  margin-right: 20px; /* Add some space between the avatar and user info */
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 20px;
 }
 
 .avatar {
-  width: 100%; /* Ensures the avatar fills the circular container */
+  width: 100%;
   height: auto;
 }
 
@@ -88,3 +95,24 @@ h1 {
   display: flex;
   align-items: center;
 }
+
+.sign-out-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.password-change-title {
+  color: #f9a825; /* Orange color for the title */
+}
+
+/* New styles for the change password button */
+.change-password-button {
+  display: block;
+  margin-top: 10px;
+}
+
+
