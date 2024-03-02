@@ -3,8 +3,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 80vh;
-    background-color: #f9f6e7; /* Adjust background color to match the signup page */
+    height: 85vh;
+    background-color: #f9f6e7;
     width: 100%;
     margin-top: 50px;
 }
@@ -21,10 +21,8 @@ form {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 12px 12px rgba(0, 0, 0, 0.5);
-    width: 100vw;
-    height: 45vh;
-    max-width: 450px; /* Adjust the max-width as needed */
-    /* Other styles remain unchanged */
+    width: 100%;
+    max-width: 450px;
 }
 
 label {
@@ -35,20 +33,19 @@ label {
 }
 
 input {
-    width: 100%;
+    width: calc(100% - 20px); /* Adjusted input width to accommodate padding */
     padding: 10px;
     margin-bottom: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
 }
-
-
 
 #signup {
     width: 100%;
     padding: 12px;
     background-color: #f9a825;
-    color: #fff; /* Set text color to white */
+    color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -56,36 +53,42 @@ input {
 }
 
 #signup:hover {
-    background-color: #986717; /* Change background color to orange on hover */
+    background-color: #986717;
 }
 
-
-//reset pass
-
 .reset-password-link {
-    background-color: #f9a825; /* Vibrant Orange */
-    color: #ffffff; /* White */
+    background-color: #f9a825;
+    color: #ffffff;
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Smooth transition */
-  }
-  
-  .reset-password-link:hover,
-  .reset-password-link:focus {
-    background-color: #ffcc80; /* Lighter shade of Vibrant Orange on hover/focus */
-  }
+    transition: background-color 0.3s ease;
+}
 
+.reset-password-link:hover,
+.reset-password-link:focus {
+    background-color: #ffcc80;
+}
 
-  .error-message {
+.error-message {
     color: #ff0000;
     font-size: 14px;
     margin-top: 10px;
-    margin-bottom: 10px;
-    background-color: #ffe6e6; /* Light red background */
-    border: 1px solid #ff4d4d; /* Red border */
-    padding: 8px; /* Add padding for better readability */
-    border-radius: 4px; /* Rounded corners */
-    box-shadow: 0 0 5px rgba(255, 77, 77, 0.5); /* Soft shadow effect */
-  }
+    margin-bottom: 20px;
+    background-color: #ffe6e6;
+    border: 1px solid #ff4d4d;
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(255, 77, 77, 0.5);
+}
+
+form p {
+    margin-top: 20px;
+}
+
+@media screen and (min-width: 768px) {
+    .error-message {
+        margin-bottom: 30px;
+    }
+}
