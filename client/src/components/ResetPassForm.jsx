@@ -4,12 +4,14 @@ import axios from 'axios';
 import '../styles/resetPassword.css';
 
 const ResetPasswordForm = () => {
+  // State variables for new password, email, token, error message, and success message
   const [newPassword, setNewPassword] = useState('');
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
+  // Extract token from URL parameters and decode it to retrieve email
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
@@ -24,6 +26,7 @@ const ResetPasswordForm = () => {
     }
   }, []);
 
+  // Function to decode the JWT token
   const decodeToken = (token) => {
     try {
       const decoded = JSON.parse(atob(token.split('.')[1]));
@@ -34,6 +37,7 @@ const ResetPasswordForm = () => {
     }
   };
 
+  // Function to handle the password reset process
   const handleResetPassword = async () => {
     try {
       const response = await axios.post(`http://localhost:3001/api/auth/reset-password/${token}`, {
@@ -68,8 +72,8 @@ const ResetPasswordForm = () => {
           <p className="email-info">Password reset for:</p>
           <p className="user-email">{email}</p>
         </div>
-        {errorMessage && <div className="error-message">{errorMessage}</div>}
-        {successMessage && <div className="success-message">{successMessage}</div>}
+        {errorMessage && <div className="error-message">{errorMessage}</div>} {/* Display error message if exists */}
+        {successMessage && <div className="success-message">{successMessage}</div>} {/* Display success message if exists */}
         <button type="submit" className="btn btn-primary">Reset Password</button>
       </form>
     </div>

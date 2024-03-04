@@ -3,22 +3,23 @@ import axios from 'axios';
 import '../styles/login.css'
 
 const LoginPage = () => {
+  // State variables for username, password, error message, and login status
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Function to handle the login process
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Advanced validation
+    // Advanced validation for username and password
     if (!username.trim() || !password.trim()) {
       setError('Please enter both username and password.');
       return;
     }
 
     // Comprehensive username format check
-    
     const usernameRegex = /^[a-zA-Z0-9_]{3,16}$/;
     if (!usernameRegex.test(username)) {
       setError('Invalid username format. Use alphanumeric characters and underscores (3-16 characters).');
@@ -26,7 +27,6 @@ const LoginPage = () => {
     }
 
     // Comprehensive password policy enforcement
-
     const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/;
     if (!passwordRegex.test(password)) {
       setError('Password must contain at least 8 characters, including one uppercase letter, one lowercase letter, and one number.');
@@ -41,13 +41,14 @@ const LoginPage = () => {
       const token = response.data.token;
       localStorage.setItem('token', token);
       setIsLoggedIn(true);
-      // Redirect to the dashboard
+      // Redirect to the dashboard upon successful login
       window.location.href = '/dashboard';
     } catch (error) {
       setError('Invalid username or password');
     }
   };
 
+  // Function to handle forgot password redirection
   const handleForgotPassword = () => {
     window.location.href = '/forgot-password-page';
   };
@@ -55,7 +56,7 @@ const LoginPage = () => {
   return (
     <div className="container">
       {isLoggedIn ? (
-        <Dashboard client:load />
+        <Dashboard client:load /> {/* Load the dashboard if the user is logged in */}
       ) : (
         <div>
           <h1>Login</h1>
@@ -79,7 +80,7 @@ const LoginPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {error && <p className="error-message">{error}</p>}
+              {error && <p className="error-message">{error}</p>} {/* Display error message if exists */}
             </div>
             <button type="submit" id="signup">Login</button>
             <br></br>

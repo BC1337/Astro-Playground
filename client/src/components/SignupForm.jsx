@@ -4,6 +4,7 @@ import zxcvbn from 'zxcvbn'; // Import zxcvbn library
 import '../styles/signup.css';
 
 const SignupForm = () => {
+  // State variables for form data and error message
   const [formData, setFormData] = useState({
     name: '',
     username: '',
@@ -12,17 +13,20 @@ const SignupForm = () => {
   });
   const [error, setError] = useState('');
 
+  // Function to handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  // Function to calculate password strength score
   const getPasswordStrength = () => {
     if (!formData.password) return 0;
     const result = zxcvbn(formData.password);
     return result.score;
   };
 
+  // Function to determine meter color based on password strength
   const getMeterColor = () => {
     const strength = getPasswordStrength();
     switch (strength) {
@@ -41,6 +45,7 @@ const SignupForm = () => {
     }
   };
 
+  // Function to display password strength text
   const getStrengthText = () => {
     const strength = getPasswordStrength();
     switch (strength) {
@@ -59,6 +64,7 @@ const SignupForm = () => {
     }
   };
 
+  // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -124,6 +130,7 @@ const SignupForm = () => {
         <label htmlFor="password">Password</label>
         <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} />
         
+        {/* Display password strength meter */}
         <div className="password-strength-text">
           {getStrengthText()}
         </div>

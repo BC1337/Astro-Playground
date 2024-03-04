@@ -4,7 +4,13 @@ import '../styles/dashboard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes, faCheck, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
+/**
+ * Dashboard component renders the user dashboard.
+ * It allows users to view and edit their profile information,
+ * change their avatar, and change their password.
+ */
 const Dashboard = () => {
+  // State variables to manage user information and component states
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -15,7 +21,7 @@ const Dashboard = () => {
     email: ''
   });
   const [avatarUrl, setAvatarUrl] = useState('');
-  const [newAvatar, setNewAvatar] = useState(null); // State for the new avatar image
+  const [newAvatar, setNewAvatar] = useState(null);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
@@ -23,53 +29,46 @@ const Dashboard = () => {
   const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
   const [showPasswordChange, setShowPasswordChange] = useState(false);
 
-
+  // UseEffect hook to handle Server Sent Events (SSE) for live avatar updates
   useEffect(() => {
+    // Check if page needs to be refreshed to reflect changes
     const refreshDashboard = localStorage.getItem('refreshDashboard');
-
     if (refreshDashboard === 'true') {
       localStorage.removeItem('refreshDashboard'); // Clear the flag
       window.location.reload(); // Reload the page
     }
-  }, []);
 
-  useEffect(() => {
+    // Set up SSE to listen for avatar updates
     const eventSource = new EventSource('http://localhost:3001/api/auth/sse');
-  
     eventSource.onmessage = (event) => {
       const userData = JSON.parse(event.data);
       const newAvatarUrl = userData.user.avatar + `?${new Date().getTime()}`;
-      console.log('New avatar URL:', newAvatarUrl); // Log the new avatar URL
-      setAvatarUrl(newAvatarUrl);
+      setAvatarUrl(newAvatarUrl); // Update avatar URL
     };
-  
     eventSource.onerror = (error) => {
       console.error('SSE connection error:', error);
-      // Handle SSE connection error
     };
-  
+
     return () => {
-      eventSource.close();
+      eventSource.close(); // Clean up SSE event listener
     };
   }, []);
 
+  // UseEffect hook to fetch user information when component mounts
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
         const token = localStorage.getItem('token');
-  
         if (!token) {
           setIsLoggedIn(false);
           setIsLoading(false);
           return;
         }
-  
         const config = {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         };
-  
         const response = await axios.get('http://localhost:3001/api/auth/user', config);
         setUser(response.data.user);
         setUpdatedUser(response.data.user);
@@ -81,15 +80,16 @@ const Dashboard = () => {
         setIsLoading(false);
       }
     };
-  
     fetchUserInfo();
   }, []);
 
+  // Toggle edit mode for user information
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
     setShowPasswordChange(false); // Close the password change form when toggling edit mode
   };
 
+  // Handle user input changes
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUpdatedUser((prevUser) => ({
@@ -98,6 +98,7 @@ const Dashboard = () => {
     }));
   };
 
+  // Update user information
   const handleUpdate = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -116,20 +117,22 @@ const Dashboard = () => {
     }
   };
 
+  // Reset edited user information
   const handleCancel = () => {
     setUpdatedUser(user);
     setIsEditing(false);
   };
 
+  // Handle file change for avatar upload
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setNewAvatar(file);
   };
 
+  // Upload new avatar
   const handleAvatarUpload = async () => {
     const formData = new FormData();
     formData.append('avatar', newAvatar);
-  
     try {
       const token = localStorage.getItem('token');
       const config = {
@@ -141,7 +144,6 @@ const Dashboard = () => {
       const response = await axios.put('http://localhost:3001/api/auth/user/avatar', formData, config);
       const avatarFullPath = `http://localhost:3001/${response.data.user.avatar}`;
       setAvatarUrl(avatarFullPath);
-      console.log('Avatar upload response:', response.data);
       setNewAvatar(null);
     } catch (error) {
       console.error('Error uploading avatar:', error);
@@ -149,11 +151,13 @@ const Dashboard = () => {
     }
   };
 
+  // Handle user sign out
   const handleSignOut = () => {
     localStorage.removeItem('token');
     window.location.href = '/'; // Redirect to the sign-in page
   };
 
+  // Handle password change
   const handlePasswordChange = async () => {
     try {
       if (newPassword !== confirmNewPassword) {
@@ -169,13 +173,9 @@ const Dashboard = () => {
       const payload = {
         currentPassword,
         newPassword,
-        confirmNewPassword, // Include confirmNewPassword in the payload
+        confirmNewPassword,
       };
-      const response = await axios.put(
-        'http://localhost:3001/api/auth/user/password',
-        payload,
-        config
-      );
+      const response = await axios.put('http://localhost:3001/api/auth/user/password', payload, config);
       setPasswordChangeSuccess(true);
       setPasswordChangeError('');
       setCurrentPassword('');
@@ -185,6 +185,8 @@ const Dashboard = () => {
       setPasswordChangeError('Failed to change password. Please try again.');
     }
   };
+
+  // Render the Dashboard component
   return (
     <div className="dashboard-container">
       <div className="sign-out-button" onClick={handleSignOut}>
