@@ -116,3 +116,42 @@ h1 {
 }
 
 
+//tab test
+
+/* Styling for tabs */
+.tabs ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tabs ul li {
+  display: inline-block;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: 1px solid #f9a825; /* Vibrant Orange */
+  border-bottom: none;
+  border-radius: 5px 5px 0 0;
+  background-color: #2c3e50; /* Darker shade for tab background */
+  margin-right: 5px;
+  color: #ffffff; /* White text color */
+}
+
+.tabs ul li:hover {
+  background-color: #34495e; /* Slightly darker shade of tab background on hover */
+}
+
+/* Style for active tab */
+.tabs ul li.active {
+  background-color: #ffffff; /* White background for active tab */
+  border-bottom: 1px solid #ffffff; /* White bottom border for active tab */
+  color: #f9a825; /* Vibrant Orange text color for active tab */
+}
+
+/* Styling for tab content */
+.tab-content {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 0 0 5px 5px; /* Adjusted border radius */
+  background-color:#2c3e50; /* White background for tab content */
+}

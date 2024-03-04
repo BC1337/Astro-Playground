@@ -1,314 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import ProfileTab from './ProfileTab';
+import CalendarTab from './CalendarTab'; // Import the CalendarTab component
+import FavoritesTab from './FavoritesTab'; // Import the FavoritesTab component
 import '../styles/dashboard.css'; 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTimes, faCheck, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
-/**
- * Dashboard component renders the user dashboard.
- * It allows users to view and edit their profile information,
- * change their avatar, and change their password.
- */
 const Dashboard = () => {
-  // State variables to manage user information and component states
-  const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [updatedUser, setUpdatedUser] = useState({
-    username: '',
-    name: '',
-    email: ''
-  });
-  const [avatarUrl, setAvatarUrl] = useState('');
-  const [newAvatar, setNewAvatar] = useState(null);
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [passwordChangeError, setPasswordChangeError] = useState('');
-  const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
-  const [showPasswordChange, setShowPasswordChange] = useState(false);
+  // State to keep track of the active tab
+  const [activeTab, setActiveTab] = useState('Profile'); // Set the default active tab to 'Profile'
 
-  // UseEffect hook to handle Server Sent Events (SSE) for live avatar updates
-  useEffect(() => {
-    // Check if page needs to be refreshed to reflect changes
-    const refreshDashboard = localStorage.getItem('refreshDashboard');
-    if (refreshDashboard === 'true') {
-      localStorage.removeItem('refreshDashboard'); // Clear the flag
-      window.location.reload(); // Reload the page
-    }
-
-    // Set up SSE to listen for avatar updates
-    const eventSource = new EventSource('http://localhost:3001/api/auth/sse');
-    eventSource.onmessage = (event) => {
-      const userData = JSON.parse(event.data);
-      const newAvatarUrl = userData.user.avatar + `?${new Date().getTime()}`;
-      setAvatarUrl(newAvatarUrl); // Update avatar URL
-    };
-    eventSource.onerror = (error) => {
-      console.error('SSE connection error:', error);
-    };
-
-    return () => {
-      eventSource.close(); // Clean up SSE event listener
-    };
-  }, []);
-
-  // UseEffect hook to fetch user information when component mounts
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          setIsLoggedIn(false);
-          setIsLoading(false);
-          return;
-        }
-        const config = {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        };
-        const response = await axios.get('http://localhost:3001/api/auth/user', config);
-        setUser(response.data.user);
-        setUpdatedUser(response.data.user);
-        setAvatarUrl(`http://localhost:3001/${response.data.user.avatar}?${new Date().getTime()}`);
-        setIsLoggedIn(true);
-        setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching user information:', error);
-        setIsLoading(false);
-      }
-    };
-    fetchUserInfo();
-  }, []);
-
-  // Toggle edit mode for user information
-  const handleEditToggle = () => {
-    setIsEditing(!isEditing);
-    setShowPasswordChange(false); // Close the password change form when toggling edit mode
+  // Function to handle tab switching
+  const handleTabClick = (tabName) => {
+    setActiveTab(tabName);
   };
 
-  // Handle user input changes
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setUpdatedUser((prevUser) => ({
-      ...prevUser,
-      [name]: value,
-    }));
-  };
-
-  // Update user information
-  const handleUpdate = async () => {
-    try {
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      await axios.put('http://localhost:3001/api/auth/user', updatedUser, config);
-      alert('User information updated successfully!');
-      setUser(updatedUser);
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Error updating user information:', error);
-      alert('Failed to update user information. Please try again.');
-    }
-  };
-
-  // Reset edited user information
-  const handleCancel = () => {
-    setUpdatedUser(user);
-    setIsEditing(false);
-  };
-
-  // Handle file change for avatar upload
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    setNewAvatar(file);
-  };
-
-  // Upload new avatar
-  const handleAvatarUpload = async () => {
-    const formData = new FormData();
-    formData.append('avatar', newAvatar);
-    try {
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const response = await axios.put('http://localhost:3001/api/auth/user/avatar', formData, config);
-      const avatarFullPath = `http://localhost:3001/${response.data.user.avatar}`;
-      setAvatarUrl(avatarFullPath);
-      setNewAvatar(null);
-    } catch (error) {
-      console.error('Error uploading avatar:', error);
-      alert('Failed to upload avatar. Please try again.');
-    }
-  };
-
-  // Handle user sign out
-  const handleSignOut = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/'; // Redirect to the sign-in page
-  };
-
-  // Handle password change
-  const handlePasswordChange = async () => {
-    try {
-      if (newPassword !== confirmNewPassword) {
-        setPasswordChangeError('New passwords do not match.');
-        return;
-      }
-      const token = localStorage.getItem('token');
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      };
-      const payload = {
-        currentPassword,
-        newPassword,
-        confirmNewPassword,
-      };
-      const response = await axios.put('http://localhost:3001/api/auth/user/password', payload, config);
-      setPasswordChangeSuccess(true);
-      setPasswordChangeError('');
-      setCurrentPassword('');
-      setNewPassword('');
-      setConfirmNewPassword('');
-    } catch (error) {
-      setPasswordChangeError('Failed to change password. Please try again.');
-    }
-  };
-
-  // Render the Dashboard component
   return (
     <div className="dashboard-container">
-      <div className="sign-out-button" onClick={handleSignOut}>
-        <FontAwesomeIcon icon={faSignOutAlt} />
-      </div>
       <h1>Welcome to the Dashboard!</h1>
-      {isLoading ? (
-        <div>Loading user information...</div>
-      ) : isLoggedIn ? (
-        <div className="user-card">
-          <div className="user-card-header">
-            <h2>User Information</h2>
-            {!isEditing ? (
-              <button className="edit-button" onClick={handleEditToggle}>
-                Edit Information
-              </button>
-            ) : (
-              <div>
-                {!showPasswordChange && (
-                  <button className="change-password-button" onClick={() => setShowPasswordChange(true)}>
-                    Edit Password
-                  </button>
-                )}
-              </div>
-            )}
-          </div>
-          <div className="user-info">
-            <div className="avatar-container">
-              <img src={avatarUrl} alt="User Avatar" className="avatar" />
-            </div>
-            {isEditing && (
-              <div>
-                <input type="file" onChange={handleFileChange} />
-                <button className="upload-button" onClick={handleAvatarUpload}>
-                  Upload Avatar
-                </button>
-              </div>
-            )}
-            <p>
-              <strong>Username:</strong>{' '}
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="username"
-                  value={updatedUser.username}
-                  onChange={handleInputChange}
-                />
-              ) : (
-                user.username
-              )}
-            </p>
-            <p>
-              <strong>Name:</strong>{' '}
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="name"
-                  value={updatedUser.name}
-                  onChange={handleInputChange}
-                />
-              ) : (
-                user.name
-              )}
-            </p>
-            <p>
-              <strong>Email:</strong>{' '}
-              {isEditing ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={updatedUser.email}
-                  onChange={handleInputChange}
-                />
-              ) : (
-                user.email
-              )}
-            </p>
-          </div>
-          {showPasswordChange && (
-            <div className="password-change-form">
-              <h2 className="password-change-title"><strong>Password Change</strong></h2>
-              <input
-                type="password"
-                className="password-input"
-                placeholder="Current Password"
-                value={currentPassword}
-                onChange={(e) => setCurrentPassword(e.target.value)}
-              />
-              <input
-                type="password"
-                className="password-input"
-                placeholder="New Password"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-              />
-              <input
-                type="password"
-                className="password-input"
-                placeholder="Confirm New Password"
-                value={confirmNewPassword}
-                onChange={(e) => setConfirmNewPassword(e.target.value)}
-              />
-              <button className="edit-button" onClick={handlePasswordChange}>Change Password</button>
-              {passwordChangeError && <div className="error-message">{passwordChangeError}</div>}
-              {passwordChangeSuccess && <div>Password changed successfully!</div>}
-            </div>
-          )}
-          {/* Move Check and X buttons to the bottom right corner */}
-          {isEditing && (
-            <div className="edit-buttons-container">
-              <button className="cancel-button" onClick={handleCancel}>
-                <FontAwesomeIcon icon={faTimes} />
-              </button>
-              <button className="update-button" onClick={handleUpdate}>
-                <FontAwesomeIcon icon={faCheck} />
-              </button>
-            </div>
-          )}
-        </div>
-      ) : (
-        <div>Please log in to view the dashboard.</div>
-      )}
+      {/* Tabs */}
+      <div className="tabs">
+        <ul>
+          <li className={activeTab === 'Profile' ? 'active' : ''} onClick={() => handleTabClick('Profile')}>
+            Profile
+          </li>
+          <li className={activeTab === 'Calendar' ? 'active' : ''} onClick={() => handleTabClick('Calendar')}>
+            Calendar
+          </li>
+          <li className={activeTab === 'Favorites' ? 'active' : ''} onClick={() => handleTabClick('Favorites')}>
+            Favorites
+          </li>
+        </ul>
+      </div>
+      
+      {/* Content for each tab */}
+      <div className="tab-content">
+        {/* Profile Tab */}
+        {activeTab === 'Profile' && <ProfileTab />}
+        {/* Calendar Tab */}
+        {activeTab === 'Calendar' && <CalendarTab />}
+        {/* Favorites Tab */}
+        {activeTab === 'Favorites' && <FavoritesTab />}
+      </div>
     </div>
   );
 };
