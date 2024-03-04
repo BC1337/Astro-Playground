@@ -23,6 +23,16 @@ const Dashboard = () => {
   const [passwordChangeSuccess, setPasswordChangeSuccess] = useState(false);
   const [showPasswordChange, setShowPasswordChange] = useState(false);
 
+
+  useEffect(() => {
+    const refreshDashboard = localStorage.getItem('refreshDashboard');
+
+    if (refreshDashboard === 'true') {
+      localStorage.removeItem('refreshDashboard'); // Clear the flag
+      window.location.reload(); // Reload the page
+    }
+  }, []);
+
   useEffect(() => {
     const eventSource = new EventSource('http://localhost:3001/api/auth/sse');
   

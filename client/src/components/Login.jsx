@@ -41,6 +41,7 @@ const LoginPage = () => {
       const token = response.data.token;
       localStorage.setItem('token', token);
       setIsLoggedIn(true);
+      // Redirect to the dashboard
       window.location.href = '/dashboard';
     } catch (error) {
       setError('Invalid username or password');

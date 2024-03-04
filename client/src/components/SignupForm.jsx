@@ -98,7 +98,8 @@ const SignupForm = () => {
       });
 
       alert('Signup successful');
-      // You can redirect the user to another page or perform any other action here
+       // Redirect user to the dashboard after successful signup
+      window.location.href = '/dashboard';
     } catch (error) {
       console.error('Error:', error.message);
       setError('Signup failed');
