@@ -1,0 +1,10 @@
+/* styles.css */
+.custom-calendar .rbc-toolbar button {
+    color: #f9a825; /* Change text color */
+  }
+  
+  .custom-calendar .rbc-toolbar button:hover {
+    background-color: #f9a825; /* Change background color on hover */
+    color: #fff; /* Change text color on hover */
+  }
+  

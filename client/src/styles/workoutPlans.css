@@ -1,0 +1,62 @@
+.workout-plans-container {
+  margin: 20px auto; /* Center the container horizontally */
+  max-width: 1200px; /* Limit the maximum width of the container */
+}
+
+.workout-plans-container h2 {
+  color: #f9a825; /* Orange color */
+  font-size: 24px; /* Adjust the font size as needed */
+}
+
+.workout-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  justify-content: center; /* Center the grid items horizontally */
+}
+
+/* Media queries for adjusting the grid layout */
+@media screen and (min-width: 768px) {
+  .workout-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .workout-cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .workout-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+}
+
+
+//tabs 
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px 20px;
+  margin: 0 5px;
+  color: #333; /* Default text color */
+  
+}
+
+.tabs button.active {
+  background-color: #f9a825; /* Orange color */
+  color: #fff; /* White text color */
+  border-radius: 5px;
+}
