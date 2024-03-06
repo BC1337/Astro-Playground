@@ -1,20 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import axios from 'axios'; // Import Axios
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../styles/calendar.css';
 
 const localizer = momentLocalizer(moment);
 
-const CalendarTab = ({ selectedDate }) => {
-  const events = [
-    {
-      title: 'Event 1',
-      start: selectedDate,
-      end: selectedDate,
-    },
-    // Add more events as needed
-  ];
+const CalendarTab = () => {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    // Fetch workout events from the server when component mounts
+    fetchWorkoutEvents();
+  }, []);
+
+  const fetchWorkoutEvents = () => {
+    // Fetch workout events from the server using Axios
+    axios.get('http://localhost:3001/api/auth/workout-events')
+      .then(response => {
+        setEvents(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching workout events:', error);
+      });
+  };
 
   const handleCustomButtonClick = () => {
     console.log('Custom button clicked');

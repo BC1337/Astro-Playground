@@ -24,3 +24,10 @@ model PasswordReset {
   token     String   @unique
   expiresAt DateTime
 }
+
+model WorkoutEvent {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  workout   String   // Name of the workout
+  date      DateTime // Date of the workout event
+  createdAt DateTime @default(now()) // Timestamp of when the workout event was created
+}

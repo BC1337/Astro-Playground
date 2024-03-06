@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import '../styles/workoutCard.css';
@@ -11,13 +12,47 @@ const WorkoutCard = ({ workout }) => {
     setSelectedDate(event.target.value);
   };
 
-  const handleConfirmDate = () => {
-    // Add logic to save the selected date
-    setIsDatePickerOpen(false);
+  const handleConfirmDate = async () => {
+    try {
+      // Retrieve the token from local storage
+      const token = localStorage.getItem('token');
+  
+      // Ensure that the token is not undefined
+      if (!token) {
+        console.error('Token is missing');
+        return;
+      }
+  
+      // Attach the token to the headers of the Axios request
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+  
+      // Convert the selected date to ISO-8601 format
+      const isoDate = new Date(selectedDate).toISOString();
+  
+      // Send the request with the token attached
+      const response = await axios.post(
+        'http://localhost:3001/api/auth/workout-events',
+        {
+          workout: workout.name,
+          date: isoDate, // Use ISO-8601 formatted date
+        },
+        config
+      );
+  
+      console.log('Workout event created:', response.data);
+      setIsDatePickerOpen(false);
+    } catch (error) {
+      console.error('Error creating workout event:', error);
+      // Handle error display or notification to the user
+    }
   };
+  
 
   const handleCancelDate = () => {
-    // Add logic to discard the selected date
     setSelectedDate('');
     setIsDatePickerOpen(false);
   };

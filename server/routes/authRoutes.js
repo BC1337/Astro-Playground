@@ -3,10 +3,11 @@
 import express from 'express';
 import { signUp, login } from '../controllers/authController.js';
 import { getUserInfo, updateUser, uploadAvatar, changePassword } from '../controllers/userController.js';
-import { initiatePasswordReset, resetPassword } from '../controllers/resetPasswordController.js'; // Import controller methods for password reset
-import authenticateToken from '../middleware/authMiddleware.js'; // Import your authentication middleware
-import sendResetEmail from '../utils/sendResetEmail.js'; // Import sendResetEmail function
-import sseManager from '../utils/sseManager.js'; // Import SSE manager
+import { initiatePasswordReset, resetPassword } from '../controllers/resetPasswordController.js';
+import { createWorkoutEvent, getWorkoutEvents } from '../controllers/workoutEventController.js'; // Import controller methods
+import authenticateToken from '../middleware/authMiddleware.js';
+import sendResetEmail from '../utils/sendResetEmail.js';
+import sseManager from '../utils/sseManager.js';
 
 const router = express.Router();
 
@@ -15,10 +16,10 @@ router.post('/signup', signUp);
 router.post('/login', login);
 
 // Protected routes for user information
-router.get('/user', authenticateToken, getUserInfo); // Get user information
-router.put('/user', authenticateToken, updateUser); // Update user information
-router.put('/user/avatar', authenticateToken, uploadAvatar); // Route for updating user avatar
-router.put('/user/password', authenticateToken, changePassword); // Add route for changing password
+router.get('/user', authenticateToken, getUserInfo);
+router.put('/user', authenticateToken, updateUser);
+router.put('/user/avatar', authenticateToken, uploadAvatar);
+router.put('/user/password', authenticateToken, changePassword);
 
 // SSE endpoint
 router.get('/sse', (req, res) => {
@@ -27,12 +28,16 @@ router.get('/sse', (req, res) => {
     req.on('close', () => {
       sseManager.removeConnection(res);
     });
-  });
-
+});
 
 // Password reset routes
-router.post('/reset-password', initiatePasswordReset); // Initiate password reset process
-router.post('/reset-password/:token', resetPassword); // Route for handling password reset confirmation
+router.post('/reset-password', initiatePasswordReset);
+router.post('/reset-password/:token', resetPassword);
 
+// Route for creating workout event
+router.post('/workout-events', authenticateToken, createWorkoutEvent);
+
+// Route for fetching workout events
+router.get('/workout-events', authenticateToken, getWorkoutEvents);
 
 export default router;
