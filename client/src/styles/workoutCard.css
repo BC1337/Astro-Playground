@@ -44,3 +44,31 @@
     width: 200px;
   }
   
+
+  .custom-date-picker .date-picker-toggle {
+    color: #f9a825; /* Orange color */
+    font-weight: bold;
+    border: 1px solid #f9a825; /* Orange border */
+    padding: 8px 12px; /* Adjust padding as needed */
+    border-radius: 4px; /* Add border radius for rounded corners */
+    cursor: pointer; /* Show pointer cursor on hover */
+  }
+
+
+  .custom-date-picker .date-picker-actions {
+    display: flex;
+    justify-content: center; /* Center the icons */
+    font-size: 20px;
+    margin-top: 8px; /* Add some space between the input and icons */
+    margin-right: -90px; /* Move the button group to the right */
+    gap: 20px;
+  }
+  
+  .custom-date-picker .date-picker-actions button.confirm-button {
+    color: green; /* Set the color of the check mark to green */
+  }
+  
+  .custom-date-picker .date-picker-actions button.cancel-button {
+    color: red; /* Set the color of the X mark to red */
+  }
+  

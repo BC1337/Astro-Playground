@@ -1,4 +1,4 @@
-/* styles.css */
+/* landingpage.css */
 
 body {
     color: #333; /* Dark gray text color */
@@ -36,14 +36,15 @@ body {
     background-color: #555; /* Darker shade of gray on hover */
 }
 
-/* Add the following CSS to your existing stylesheet */
-
 .feature-section {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 3rem;
     margin-bottom: 3rem; /* Increase margin between sections */
+    border: 2px solid #f9a825; /* Add border to the section */
+    border-radius: 8px; /* Round the corners */
+    padding: 20px; /* Add padding for better spacing */
 }
 
 .feature-section.alternate .feature-content {
@@ -78,36 +79,48 @@ body {
     border-radius: 8px;
 }
 
-//testimonials
-
 .testimonials {
     text-align: center;
     margin-top: 3rem;
-  }
-  
-  .testimonials h2 {
+}
+
+.testimonials h2 {
     font-size: 2rem;
     margin-bottom: 1rem;
-  }
-  
-  .carousel {
+}
+
+.carousel {
     width: 80%;
     margin: 0 auto;
     overflow: hidden;
-  }
-  
-  .carousel-inner {
+}
+
+.carousel-inner {
     display: flex;
     transition: transform 0.5s ease;
-  }
-  
-  .testimonial {
+}
+
+.testimonial {
     flex: 0 0 100%;
     text-align: center;
     padding: 20px;
-  }
-  
-  .author {
+}
+
+.author {
     font-style: italic;
-  }
-  
+}
+
+.click-hint {
+    font-size: 0.8rem;
+    color: #888; /* Subtle color */
+    margin-top: 0.5rem;
+    text-align: center;
+    padding: 0.3rem 0.5rem; /* Add padding for better spacing */
+    border: 1px solid #ddd; /* Add a subtle border */
+    border-radius: 4px; /* Round the corners */
+    cursor: pointer;
+}
+
+.click-hint span {
+    color: #f9a825; /* Vibrant orange color for the highlighted word */
+}
