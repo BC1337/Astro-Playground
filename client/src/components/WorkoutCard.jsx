@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../styles/workoutCard.css';
 
+// this card component is used in workoutplan.jsx
+
 const WorkoutCard = ({ workout }) => {
   const [selectedDate, setSelectedDate] = useState('');
 

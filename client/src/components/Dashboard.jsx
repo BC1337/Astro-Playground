@@ -1,22 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProfileTab from './ProfileTab';
-import CalendarTab from './CalendarTab'; // Import the CalendarTab component
-import FavoritesTab from './FavoritesTab'; // Import the FavoritesTab component
-import '../styles/dashboard.css'; 
+import CalendarTab from './CalendarTab';
+import FavoritesTab from './FavoritesTab';
+import '../styles/dashboard.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
 const Dashboard = () => {
-  // State to keep track of the active tab
-  const [activeTab, setActiveTab] = useState('Profile'); // Set the default active tab to 'Profile'
+  const [activeTab, setActiveTab] = useState('Profile');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  // Function to handle tab switching
+  useEffect(() => {
+    // Check if the user is authenticated
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token); // Set isLoggedIn to true if token exists
+  }, []);
+
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
 
+  const handleSignOut = () => {
+    // Remove the token from local storage
+    localStorage.removeItem('token');
+    // Redirect the user to the login page or any other desired page
+    window.location.href = '/login';
+  };
+
+  if (!isLoggedIn) {
+    return (
+      <div className="dashboard-container">
+        <h1>Please log in to view the dashboard</h1>
+      </div>
+    );
+  }
+
   return (
     <div className="dashboard-container">
       <h1>Welcome to the Dashboard!</h1>
-      {/* Tabs */}
+      <div className="sign-out-button" onClick={handleSignOut}>
+        <FontAwesomeIcon icon={faSignOutAlt} />
+      </div>
       <div className="tabs">
         <ul>
           <li className={activeTab === 'Profile' ? 'active' : ''} onClick={() => handleTabClick('Profile')}>
@@ -30,14 +54,9 @@ const Dashboard = () => {
           </li>
         </ul>
       </div>
-      
-      {/* Content for each tab */}
       <div className="tab-content">
-        {/* Profile Tab */}
         {activeTab === 'Profile' && <ProfileTab />}
-        {/* Calendar Tab */}
         {activeTab === 'Calendar' && <CalendarTab />}
-        {/* Favorites Tab */}
         {activeTab === 'Favorites' && <FavoritesTab />}
       </div>
     </div>
