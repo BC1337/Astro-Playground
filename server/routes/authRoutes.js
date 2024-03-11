@@ -40,4 +40,6 @@ router.post('/workout-events', authenticateToken, createWorkoutEvent);
 // Route for fetching workout events
 router.get('/workout-events', authenticateToken, getWorkoutEvents);
 
+
+
 export default router;

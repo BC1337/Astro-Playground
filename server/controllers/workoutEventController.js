@@ -30,6 +30,8 @@ async function getWorkoutEvents(req, res) {
     }
   }
 
+
+
 // Other CRUD operation handlers go here...
 
-export { createWorkoutEvent, getWorkoutEvents };
+export { createWorkoutEvent, getWorkoutEvents};

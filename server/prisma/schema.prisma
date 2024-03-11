@@ -27,7 +27,8 @@ model PasswordReset {
 
 model WorkoutEvent {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  workout   String   // Name of the workout
-  date      DateTime // Date of the workout event
-  createdAt DateTime @default(now()) // Timestamp of when the workout event was created
+  workout   String
+  date      DateTime
+  position  Int      @default(0) // Set a default value for position
+  createdAt DateTime @default(now())
 }

@@ -25,8 +25,7 @@ class SSEManager {
         res.write(`data: ${data}\n\n`);
       });
     }
-  }
-  
+}
   // Create a singleton instance of SSEManager
   const sseManager = new SSEManager();
   
